@@ -1,0 +1,33 @@
+### create new user
+POST http://localhost:3000/common-api/users
+Content-Type: application/json
+
+{
+    "username" : "soujith",
+    "email" : "soujith@gmail.com",
+    "password" : "soujith",
+    "role" : "USER",
+    "bio" : "student"
+}
+
+###user login
+POST http://localhost:3000/common-api/login
+Content-Type: application/json
+
+{
+    "email" : "soujith@gmail.com",
+    "password" : "soujith"
+}
+
+### user logout
+GET http://localhost:3000/common-api/logout
+
+###change password
+PUT http://localhost:3000/common-api/password
+Content-Type: application/json
+Cookie: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI5YzVmMTg3YzUxOWRmODRkYTE5ZGEiLCJyb2xlIjoiVVNFUiIsInRva2VuVmVyc2lvbiI6MCwiaWF0IjoxNzgxMTIzMzAwLCJleHAiOjE3ODExMjY5MDB9.iPM14V2uzeTwzS5YBe8C8OOUIJHR_aLiRD0S42jqJ08;
+
+{
+    "currentPassword" : "soujith",
+    "newPassword" : "sunny"
+}

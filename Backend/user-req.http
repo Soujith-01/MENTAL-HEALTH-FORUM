@@ -1,0 +1,26 @@
+###create a new post
+POST http://localhost:3000/user-api/posts
+Content-Type: application/json
+
+{
+  "title": "My First Post",
+  "content": "Feeling happy today",
+  "category": "Self Improvement",
+  "tags": "motivation,fitness",
+  "isAnonymous": "true"
+}
+
+### delete a post
+DELETE http://localhost:3000/user-api/posts/6a2b0d0e43c842d5c5c6ce0a
+
+###save post
+POST http://localhost:3000/user-api/posts/6a2b0cca43c842d5c5c6ce09/save
+
+###add comment
+POST http://localhost:3000/user-api/posts/6a2b0cca43c842d5c5c6ce09/comments
+Content-Type: application/json
+
+{
+  "content":"nice",
+  "isAnonymous": "true"
+}

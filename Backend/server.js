@@ -27,19 +27,24 @@ const defaultOrigins = [
 
 const envOrigins = `${process.env.FRONTEND_URL || ''},${process.env.FRONTEND_URLS || ''}`
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/$/, ''))
   .filter(Boolean)
 
-const allowedOrigins = [...new Set([...envOrigins, ...defaultOrigins])]
+const normalizeOrigin = (origin) => origin?.trim().replace(/\/$/, '')
+
+const allowedOrigins = [...new Set([...envOrigins, ...defaultOrigins].map(normalizeOrigin))]
 
 const corsOptions = {
   origin: (origin, callback) => {
+    const normalizedOrigin = normalizeOrigin(origin)
+    console.log('CORS request origin:', origin, 'normalized:', normalizedOrigin)
+
     if (!origin) {
       // Allow non-browser requests such as server-to-server calls.
       return callback(null, true)
     }
 
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true)
     }
 

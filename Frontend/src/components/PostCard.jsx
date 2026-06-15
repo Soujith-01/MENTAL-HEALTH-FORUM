@@ -250,7 +250,6 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
         }
       );
 

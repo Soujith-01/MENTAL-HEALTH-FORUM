@@ -49,7 +49,6 @@ function CreatePost() {
     try {
       const res = await axios.post("/user-api/posts", formData, {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success(res.data?.message || "Post created");

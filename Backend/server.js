@@ -20,7 +20,8 @@ config()
 const defaultOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  'https://ornate-jelly-4c7c12.netlify.app'
+  'https://ornate-jelly-4c7c12.netlify.app',
+  'https://mentalhealthforum.vercel.app/'
 ]
 
 const envOrigins = `${process.env.FRONTEND_URL || ''},${process.env.FRONTEND_URLS || ''}`

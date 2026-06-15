@@ -13,6 +13,7 @@ import { adminApp } from './APIS/AdminApi.js';
 //import { setupSocket } from "./Sockets/socket.js";
 
 const app=exp()
+app.set('trust proxy', 1)  
 const server=createServer(app)
 
 config()
@@ -21,7 +22,7 @@ const defaultOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'https://ornate-jelly-4c7c12.netlify.app',
-  'https://mentalhealthforum.vercel.app/'
+  'https://mentalhealthforum.vercel.app'
 ]
 
 const envOrigins = `${process.env.FRONTEND_URL || ''},${process.env.FRONTEND_URLS || ''}`
@@ -68,7 +69,8 @@ const io = new Server(server, {
     origin: [
       'http://localhost:5173',    // Frontend dev server
       'http://127.0.0.1:5173',
-      'https://ornate-jelly-4c7c12.netlify.app'
+      'https://ornate-jelly-4c7c12.netlify.app',
+      'https://mentalhealthforum.vercel.app'
     ],
     credentials: true,
     methods: ["GET", "POST","PUT","DELETE"],

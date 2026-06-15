@@ -21,7 +21,7 @@ const getCookieOptions = (req) => {
 };
 
 // Register a new user
-commonApp.post('/users',async(req,res,next)=>{
+commonApp.post('/users',async (req, res)=>{
       try{
         //get new user obj from req
         const newUser=req.body
@@ -56,7 +56,7 @@ commonApp.post('/users',async(req,res,next)=>{
             }
 
             console.log("err is ", err);
-            next(err);
+            throw err;
     }
 })
 

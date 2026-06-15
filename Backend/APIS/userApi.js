@@ -63,12 +63,9 @@ const maskAnonymousPost = (post) => {
 }
 
 const uploadImage = async (file) => {
-	if (!file) {
-		return null
-	}
-
-	const result = await uploadToCloudinary(file.buffer, file.originalname)
-	return result.secure_url || result.url || null
+    if (!file) return null 
+    const result = await uploadToCloudinary(file.buffer, file.originalname)
+    return result.secure_url || result.url || null
 }
 
 const getPostQuery = (query) => {
@@ -129,25 +126,25 @@ userApp.get('/categories', (req, res) => {
 })
 
 // Public post feed
-userApp.get('/posts', async (req, res, next) => {
+userApp.get('/posts', async (req, res) => {
 		const posts = await PostModel.find(getPostQuery(req.query)).populate(postUserPopulate).sort({ createdAt: -1 })
 		res.status(200).json({ posts: posts.map(maskAnonymousPost) })
 })
 
 // Search posts by keywords, tags, or category
-userApp.get('/posts/search', async (req, res, next) => {
+userApp.get('/posts/search', async (req, res) => {
 	const posts = await PostModel.find(getPostQuery(req.query)).populate(postUserPopulate).sort({ createdAt: -1 })
 	res.status(200).json({ posts: posts.map(maskAnonymousPost) })
 })
 
 // Category-specific post feed
-userApp.get('/categories/:category/posts', async (req, res, next) => {
+userApp.get('/categories/:category/posts', async (req, res) => {
 		const posts = await PostModel.find({ category: req.params.category }).populate(postUserPopulate).sort({ createdAt: -1 })
 		res.status(200).json({ posts: posts.map(maskAnonymousPost) })
 })
 
 // View a single post
-userApp.get('/posts/:postId', async (req, res, next) => {
+userApp.get('/posts/:postId', async (req, res) => {
 		const post = await PostModel.findByIdAndUpdate(
 			req.params.postId,
 			{ $inc: { views: 1 } },
@@ -163,7 +160,7 @@ userApp.get('/posts/:postId', async (req, res, next) => {
 })
 
 // Create a new post
-userApp.post('/posts', verifyToken('USER', 'ADMIN'), upload.single('image'), async (req, res, next) => {
+userApp.post('/posts', verifyToken('USER', 'ADMIN'), upload.single('image'), async (req, res) => {
 	const { content, category, tags, isAnonymous } = req.body
 
 	if (!content || !category) {
@@ -195,7 +192,7 @@ userApp.post('/posts', verifyToken('USER', 'ADMIN'), upload.single('image'), asy
 })
 
 // Edit an existing post owned by the current user
-userApp.put('/posts/:postId', verifyToken('USER', 'ADMIN'), upload.single('image'), async (req, res, next) => {
+userApp.put('/posts/:postId', verifyToken('USER', 'ADMIN'), upload.single('image'), async (req, res) => {
 		const post = await PostModel.findById(req.params.postId)
 		if (!post) {
 			return res.status(404).json({ message: 'Post not found' })
@@ -225,7 +222,7 @@ userApp.put('/posts/:postId', verifyToken('USER', 'ADMIN'), upload.single('image
 })
 
 // Delete a post owned by the current user
-userApp.delete('/posts/:postId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.delete('/posts/:postId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const post = await PostModel.findById(req.params.postId)
 		if (!post) {
 			return res.status(404).json({ message: 'Post not found' })
@@ -240,7 +237,7 @@ userApp.delete('/posts/:postId', verifyToken('USER', 'ADMIN'), async (req, res, 
 })
 
 // Save a post to the user dashboard
-userApp.post('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId)
 		const post = await PostModel.findById(req.params.postId)
 
@@ -258,7 +255,7 @@ userApp.post('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, re
 })
 
 // Remove a post from saved posts
-userApp.delete('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.delete('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId)
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -271,7 +268,7 @@ userApp.delete('/posts/:postId/save', verifyToken('USER', 'ADMIN'), async (req, 
 })
 
 // Report a post for moderation
-userApp.post('/posts/:postId/report', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/report', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { reason } = req.body
 		if (!reason) {
 			return res.status(400).json({ message: 'reason is required' })
@@ -289,7 +286,7 @@ userApp.post('/posts/:postId/report', verifyToken('USER', 'ADMIN'), async (req, 
 })
 
 // Add a comment to a post
-userApp.post('/posts/:postId/comments', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/comments', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { content, isAnonymous } = req.body
 		if (!content) {
 			return res.status(400).json({ message: 'content is required' })
@@ -322,7 +319,7 @@ userApp.post('/posts/:postId/comments', verifyToken('USER', 'ADMIN'), async (req
 })
 
 // Edit the current user's comment
-userApp.put('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.put('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { content } = req.body
 		const post = await PostModel.findById(req.params.postId)
 		if (!post) {
@@ -345,7 +342,7 @@ userApp.put('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'), 
 })
 
 // Delete the current user's comment
-userApp.delete('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.delete('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const post = await PostModel.findById(req.params.postId)
 		if (!post) {
 			return res.status(404).json({ message: 'Post not found' })
@@ -367,7 +364,7 @@ userApp.delete('/posts/:postId/comments/:commentId', verifyToken('USER', 'ADMIN'
 })
 
 // React to a post
-userApp.post('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { type = 'like' } = req.body
 		if (!reactionTypes.includes(type)) {
 			return res.status(400).json({ message: 'Invalid reaction type' })
@@ -398,7 +395,7 @@ userApp.post('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req, r
 })
 
 // Remove a reaction from a post
-userApp.delete('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.delete('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const post = await PostModel.findById(req.params.postId)
 		if (!post) {
 			return res.status(404).json({ message: 'Post not found' })
@@ -411,7 +408,7 @@ userApp.delete('/posts/:postId/react', verifyToken('USER', 'ADMIN'), async (req,
 })
 
 // React to a comment
-userApp.post('/posts/:postId/comments/:commentId/react', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/comments/:commentId/react', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { type = 'like' } = req.body
 		if (!reactionTypes.includes(type)) {
 			return res.status(400).json({ message: 'Invalid reaction type' })
@@ -443,7 +440,7 @@ userApp.post('/posts/:postId/comments/:commentId/react', verifyToken('USER', 'AD
 })
 
 // Report a comment for moderation
-userApp.post('/posts/:postId/comments/:commentId/report', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/posts/:postId/comments/:commentId/report', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { reason } = req.body
 		if (!reason) {
 			return res.status(400).json({ message: 'reason is required' })
@@ -470,7 +467,7 @@ userApp.post('/posts/:postId/comments/:commentId/report', verifyToken('USER', 'A
 })
 
 // View the current user's profile
-userApp.get('/me', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/me', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId).select('-password')
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -480,7 +477,7 @@ userApp.get('/me', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
 })
 
 // Update the current user's profile
-userApp.patch('/me', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.patch('/me', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId)
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -497,7 +494,7 @@ userApp.patch('/me', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
 })
 
 // Change the current user's username
-userApp.patch('/me/username', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.patch('/me/username', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { username } = req.body
 		if (!username) {
 			return res.status(400).json({ message: 'username is required' })
@@ -515,7 +512,7 @@ userApp.patch('/me/username', verifyToken('USER', 'ADMIN'), async (req, res, nex
 })
 
 // Change the current user's avatar
-userApp.patch('/me/avatar', verifyToken('USER', 'ADMIN'), upload.single('avatar'), async (req, res, next) => {
+userApp.patch('/me/avatar', verifyToken('USER', 'ADMIN'), upload.single('avatar'), async (req, res) => {
 		if (!req.file) {
 			return res.status(400).json({ message: 'avatar file is required' })
 		}
@@ -533,7 +530,7 @@ userApp.patch('/me/avatar', verifyToken('USER', 'ADMIN'), upload.single('avatar'
 })
 
 // View saved posts
-userApp.get('/me/saved-posts', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/me/saved-posts', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId).populate('savedPosts')
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -543,7 +540,7 @@ userApp.get('/me/saved-posts', verifyToken('USER', 'ADMIN'), async (req, res, ne
 })
 
 // View mood history
-userApp.get('/me/moods', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/me/moods', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId).select('moodHistory')
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -553,7 +550,7 @@ userApp.get('/me/moods', verifyToken('USER', 'ADMIN'), async (req, res, next) =>
 })
 
 // Add a daily mood entry
-userApp.post('/moods', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.post('/moods', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { mood, note = '' } = req.body
 		if (!mood) {
 			return res.status(400).json({ message: 'mood is required' })
@@ -571,7 +568,7 @@ userApp.post('/moods', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
 })
 
 // View mood statistics
-userApp.get('/moods/stats', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/moods/stats', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const user = await UserModel.findById(req.user.userId).select('moodHistory')
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' })
@@ -586,19 +583,19 @@ userApp.get('/moods/stats', verifyToken('USER', 'ADMIN'), async (req, res, next)
 })
 
 // View notifications
-userApp.get('/notifications', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/notifications', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const notifications = await NotificationModel.find({ recipient: req.user.userId }).sort({ createdAt: -1 })
 		res.status(200).json({ notifications })
 })
 
 // Clear all notifications
-userApp.delete('/notifications', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.delete('/notifications', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		await NotificationModel.deleteMany({ recipient: req.user.userId })
 		res.status(200).json({ message: 'Notifications cleared' })
 })
 
 // Load dashboard summary data
-userApp.get('/dashboard', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+userApp.get('/dashboard', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const [profile, postCount, user] = await Promise.all([
 			UserModel.findById(req.user.userId).select('-password'),
 			PostModel.countDocuments({ 'author.userId': req.user.userId }),
@@ -622,7 +619,7 @@ userApp.get('/dashboard', verifyToken('USER', 'ADMIN'), async (req, res, next) =
 })
 
 // Get public user profile by ID
-userApp.get('/users/:userId', async (req, res, next) => {
+userApp.get('/users/:userId', async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.params.userId).select('-password')
 		if (!user) {
@@ -636,7 +633,7 @@ userApp.get('/users/:userId', async (req, res, next) => {
 })
 
 // Get posts by a specific user
-userApp.get('/users/:userId/posts', async (req, res, next) => {
+userApp.get('/users/:userId/posts', async (req, res) => {
 	try {
 		const posts = await PostModel.find({ 'author.userId': req.params.userId })
 			.populate(postUserPopulate)

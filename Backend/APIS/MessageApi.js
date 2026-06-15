@@ -52,7 +52,7 @@ const getConversationPartnerId = (message, userId) => {
 }
 
 // Search users by username for recipient selection
-messageApp.get('/users/search', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.get('/users/search', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const username = String(req.query.username || '').trim()
 
 		if (!username) {
@@ -72,7 +72,7 @@ messageApp.get('/users/search', verifyToken('USER', 'ADMIN'), async (req, res, n
 })
 
 // List the current user's conversations
-messageApp.get('/chats', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.get('/chats', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const messages = await MessageModel.find({
 			$or: [{ sender: req.user.userId }, { receiver: req.user.userId }],
 		})
@@ -114,7 +114,7 @@ messageApp.get('/chats', verifyToken('USER', 'ADMIN'), async (req, res, next) =>
 })
 
 // Send a new private message
-messageApp.post('/messages', verifyToken('USER', 'ADMIN'), upload.array('attachments', 5), async (req, res, next) => {
+messageApp.post('/messages', verifyToken('USER', 'ADMIN'), upload.array('attachments', 5), async (req, res) => {
 		const { receiverId = null, content = '', parentMessage = null, channel = null } = req.body
 
 		if (!receiverId && !channel) {
@@ -149,7 +149,7 @@ messageApp.post('/messages', verifyToken('USER', 'ADMIN'), upload.array('attachm
 })
 
 // List all messages for the current user
-messageApp.get('/messages', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.get('/messages', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const messages = await MessageModel.find({
 			$or: [{ sender: req.user.userId }, { receiver: req.user.userId }],
 		}).sort({ createdAt: -1 })
@@ -158,7 +158,7 @@ messageApp.get('/messages', verifyToken('USER', 'ADMIN'), async (req, res, next)
 })
 
 // Load chat history with one user
-messageApp.get('/messages/conversation/:userId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.get('/messages/conversation/:userId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const messages = await MessageModel.find({
 			$or: [
 				{ sender: req.user.userId, receiver: req.params.userId },
@@ -172,7 +172,7 @@ messageApp.get('/messages/conversation/:userId', verifyToken('USER', 'ADMIN'), a
 })
 
 // Delete an entire direct-message chat with another user
-messageApp.delete('/messages/conversation/:userId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.delete('/messages/conversation/:userId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const result = await MessageModel.deleteMany({
 			$or: [
 				{ sender: req.user.userId, receiver: req.params.userId },
@@ -184,7 +184,7 @@ messageApp.delete('/messages/conversation/:userId', verifyToken('USER', 'ADMIN')
 })
 
 // Load a message thread and its replies
-messageApp.get('/messages/thread/:messageId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+messageApp.get('/messages/thread/:messageId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const messages = await MessageModel.find({
 			$or: [
 				{ _id: req.params.messageId },

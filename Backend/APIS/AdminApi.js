@@ -27,13 +27,13 @@ const flattenReportedComments = (posts) => {
 }
 
 // List all users for admin review
-adminApp.get('/users', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.get('/users', verifyToken('ADMIN'), async (req, res) => {
 		const users = await UserModel.find().select('-password')
 		res.status(200).json({ users })
 })
 
 // Promote or demote a user role
-adminApp.patch('/users/:userId/role', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.patch('/users/:userId/role', verifyToken('ADMIN'), async (req, res) => {
 		const { role } = req.body
 		if (!['USER', 'ADMIN'].includes(role)) {
 			return res.status(400).json({ message: 'Invalid role' })
@@ -48,7 +48,7 @@ adminApp.patch('/users/:userId/role', verifyToken('ADMIN'), async (req, res, nex
 })
 
 // Enable or disable a user account
-adminApp.patch('/users/:userId/status', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.patch('/users/:userId/status', verifyToken('ADMIN'), async (req, res) => {
 		const { isUserActive } = req.body
 		const user = await UserModel.findByIdAndUpdate(
 			req.params.userId,
@@ -64,19 +64,19 @@ adminApp.patch('/users/:userId/status', verifyToken('ADMIN'), async (req, res, n
 })
 
 // View reported posts
-adminApp.get('/reports/posts', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.get('/reports/posts', verifyToken('ADMIN'), async (req, res) => {
 		const posts = await PostModel.find({ 'reports.0': { $exists: true } }).sort({ createdAt: -1 })
 		res.status(200).json({ posts })
 })
 
 // View reported comments
-adminApp.get('/reports/comments', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.get('/reports/comments', verifyToken('ADMIN'), async (req, res) => {
 		const posts = await PostModel.find({ 'comments.reports.0': { $exists: true } }).sort({ createdAt: -1 })
 		res.status(200).json({ comments: flattenReportedComments(posts) })
 })
 
 // Send a system notification to all active users
-adminApp.post('/notifications/system', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.post('/notifications/system', verifyToken('ADMIN'), async (req, res) => {
 		const { message } = req.body
 		if (!message) {
 			return res.status(400).json({ message: 'message is required' })
@@ -93,7 +93,7 @@ adminApp.post('/notifications/system', verifyToken('ADMIN'), async (req, res, ne
 })
 
 // Report a user
-adminApp.post('/report-user/:userId', verifyToken('USER', 'ADMIN'), async (req, res, next) => {
+adminApp.post('/report-user/:userId', verifyToken('USER', 'ADMIN'), async (req, res) => {
 		const { reason } = req.body
 		if (!reason || !['Spam', 'Harassment', 'Fake Information', 'Inappropriate Content', 'Other'].includes(reason)) {
 			return res.status(400).json({ message: 'Valid reason is required' })
@@ -122,7 +122,7 @@ adminApp.post('/report-user/:userId', verifyToken('USER', 'ADMIN'), async (req, 
 })
 
 // Get all reported users
-adminApp.get('/reported-users', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.get('/reported-users', verifyToken('ADMIN'), async (req, res) => {
 		const users = await UserModel.find({ 'reports.0': { $exists: true } })
 			.select('-password')
 			.populate('reports.reportedBy', 'username')
@@ -132,7 +132,7 @@ adminApp.get('/reported-users', verifyToken('ADMIN'), async (req, res, next) => 
 })
 
 // Deactivate a user account
-adminApp.patch('/users/:userId/deactivate', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.patch('/users/:userId/deactivate', verifyToken('ADMIN'), async (req, res) => {
 		const user = await UserModel.findByIdAndUpdate(
 			req.params.userId,
 			{ isUserActive: false },
@@ -147,7 +147,7 @@ adminApp.patch('/users/:userId/deactivate', verifyToken('ADMIN'), async (req, re
 })
 
 // Delete a comment
-adminApp.delete('/comments/:commentId', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.delete('/comments/:commentId', verifyToken('ADMIN'), async (req, res) => {
 		const posts = await PostModel.find({ 'comments._id': req.params.commentId })
 		
 		if (!posts.length) {
@@ -163,7 +163,7 @@ adminApp.delete('/comments/:commentId', verifyToken('ADMIN'), async (req, res, n
 })
 
 // Get system statistics
-adminApp.get('/statistics', verifyToken('ADMIN'), async (req, res, next) => {
+adminApp.get('/statistics', verifyToken('ADMIN'), async (req, res) => {
 		const totalUsers = await UserModel.countDocuments()
 		const activeUsers = await UserModel.countDocuments({ isUserActive: true })
 		const totalPosts = await PostModel.countDocuments()

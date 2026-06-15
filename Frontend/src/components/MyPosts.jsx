@@ -38,8 +38,8 @@ function MyPosts() {
 
       try {
         const [dashboardRes, feedRes] = await Promise.all([
-          axios.get("http://localhost:3000/user-api/dashboard", { withCredentials: true }),
-          axios.get("http://localhost:3000/user-api/posts"),
+          axios.get("/user-api/dashboard", { withCredentials: true }),
+          axios.get("/user-api/posts"),
         ]);
 
         setSummary(dashboardRes.data?.summary || null);
@@ -116,3 +116,5 @@ function MyPosts() {
 }
 
 export default MyPosts;
+
+

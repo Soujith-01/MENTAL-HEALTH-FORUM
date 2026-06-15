@@ -29,7 +29,7 @@ function ReportedUsers() {
 
     try {
       const res = await axios.get(
-        "http://localhost:3000/admin-api/reported-users",
+        "/admin-api/reported-users",
         { withCredentials: true }
       );
 
@@ -48,7 +48,7 @@ function ReportedUsers() {
 
     try {
       const res = await axios.patch(
-        `http://localhost:3000/admin-api/users/${userId}/deactivate`,
+        `/admin-api/users/${userId}/deactivate`,
         {},
         { withCredentials: true }
       );
@@ -176,3 +176,5 @@ function ReportedUsers() {
 }
 
 export default ReportedUsers;
+
+

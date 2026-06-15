@@ -32,7 +32,7 @@ function Login() {
     setApiError("");
 
     try {
-      const res = await axios.post("http://localhost:3000/common-api/login", userCredObj, {
+      const res = await axios.post("/common-api/login", userCredObj, {
         withCredentials: true,
       });
 
@@ -123,3 +123,4 @@ function Login() {
 }
 
 export default Login;
+

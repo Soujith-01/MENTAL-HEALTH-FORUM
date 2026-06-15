@@ -25,11 +25,11 @@ function Feed() {
 
     const loadFeed = async () => {
       try {
-        const requests = [axios.get("http://localhost:3000/user-api/posts", { withCredentials: true })];
+        const requests = [axios.get("/user-api/posts", { withCredentials: true })];
 
         if (currentUser?._id) {
           requests.push(
-            axios.get("http://localhost:3000/user-api/me/saved-posts", {
+            axios.get("/user-api/me/saved-posts", {
               withCredentials: true,
             })
           );
@@ -157,3 +157,4 @@ function Feed() {
 }
 
 export default Feed;
+

@@ -17,15 +17,37 @@ const server=createServer(app)
 
 config()
 
+const defaultOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://ornate-jelly-4c7c12.netlify.app'
+]
+
 const envOrigins = `${process.env.FRONTEND_URL || ''},${process.env.FRONTEND_URLS || ''}`
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
 
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
+const allowedOrigins = [...new Set([...envOrigins, ...defaultOrigins])]
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) {
+      // Allow non-browser requests such as server-to-server calls.
+      return callback(null, true)
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true)
+    }
+
+    return callback(new Error(`CORS origin denied: ${origin}`), false)
+  },
+  credentials: true,
+}
+
+console.log('CORS allowed origins:', allowedOrigins)
+app.use(cors(corsOptions));
 
 
 //body parser middleware
@@ -45,7 +67,7 @@ const io = new Server(server, {
     origin: [
       'http://localhost:5173',    // Frontend dev server
       'http://127.0.0.1:5173',
-      'https://chat-app-frontend-g972.vercel.app/'
+      'https://ornate-jelly-4c7c12.netlify.app'
     ],
     credentials: true,
     methods: ["GET", "POST","PUT","DELETE"],
@@ -68,9 +90,15 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+const dbUrl = process.env.DB_URL;
+if (!dbUrl) {
+  console.error('Missing DB_URL environment variable. Set DB_URL in Render dashboard or your production environment.');
+  process.exit(1);
+}
+
 const connectDB = async () => {
   try {
-    await connect(process.env.DB_URL);
+    await connect(dbUrl);
     console.log('DB connected ');
 
     // if server is already listening (e.g., nodemon restarted the module), avoid listening twice
@@ -81,7 +109,7 @@ const connectDB = async () => {
 
     server.listen(PORT, () => console.log(`server listening on ${PORT}`));
   } catch (error) {
-    console.log('error in connecting', error.message);
+    console.error('error in connecting', error);
     process.exit(1);
   }
 };

@@ -39,7 +39,7 @@ function PostDetails() {
   useEffect(() => {
     const loadPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/user-api/posts/${postId}`);
+        const res = await axios.get(`/user-api/posts/${postId}`);
         setPost(res.data?.post || null);
       } catch (requestError) {
         setError(requestError.response?.data?.message || "Unable to load post");
@@ -84,7 +84,7 @@ function PostDetails() {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/user-api/posts/${post._id}/comments/${commentId}/report`,
+        `/user-api/posts/${post._id}/comments/${commentId}/report`,
         { reason: "Comment reported from post detail" },
         { withCredentials: true }
       );
@@ -213,3 +213,5 @@ function PostDetails() {
 }
 
 export default PostDetails;
+
+

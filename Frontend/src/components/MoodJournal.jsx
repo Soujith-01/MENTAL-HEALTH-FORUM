@@ -43,8 +43,8 @@ function MoodJournal() {
 
       try {
         const [moodsRes, statsRes] = await Promise.all([
-          axios.get("http://localhost:3000/user-api/me/moods", { withCredentials: true }),
-          axios.get("http://localhost:3000/user-api/moods/stats", { withCredentials: true }),
+          axios.get("/user-api/me/moods", { withCredentials: true }),
+          axios.get("/user-api/moods/stats", { withCredentials: true }),
         ]);
 
         setMoods(Array.isArray(moodsRes.data?.moods) ? moodsRes.data.moods : []);
@@ -61,8 +61,8 @@ function MoodJournal() {
 
   const refreshMoodData = async () => {
     const [moodsRes, statsRes] = await Promise.all([
-      axios.get("http://localhost:3000/user-api/me/moods", { withCredentials: true }),
-      axios.get("http://localhost:3000/user-api/moods/stats", { withCredentials: true }),
+      axios.get("/user-api/me/moods", { withCredentials: true }),
+      axios.get("/user-api/moods/stats", { withCredentials: true }),
     ]);
 
     setMoods(Array.isArray(moodsRes.data?.moods) ? moodsRes.data.moods : []);
@@ -81,7 +81,7 @@ function MoodJournal() {
 
     try {
       await axios.post(
-        "http://localhost:3000/user-api/moods",
+        "/user-api/moods",
         { mood: selectedMood, note: note.trim() },
         { withCredentials: true }
       );
@@ -206,3 +206,4 @@ function MoodJournal() {
 }
 
 export default MoodJournal;
+

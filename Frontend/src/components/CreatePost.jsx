@@ -26,7 +26,7 @@ function CreatePost() {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/user-api/categories");
+        const res = await axios.get("/user-api/categories");
         setCategories(res.data?.categories || []);
       } catch {
         setCategories([]);
@@ -47,7 +47,7 @@ function CreatePost() {
     const formData = new FormData(event.currentTarget);
 
     try {
-      const res = await axios.post("http://localhost:3000/user-api/posts", formData, {
+      const res = await axios.post("/user-api/posts", formData, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -136,3 +136,5 @@ function CreatePost() {
 }
 
 export default CreatePost;
+
+

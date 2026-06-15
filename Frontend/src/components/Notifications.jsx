@@ -21,7 +21,7 @@ function Notifications() {
 
   const loadNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/user-api/notifications", {
+      const res = await axios.get("/user-api/notifications", {
         withCredentials: true,
       });
 
@@ -39,7 +39,7 @@ function Notifications() {
 
   const handleClear = async () => {
     try {
-      await axios.delete("http://localhost:3000/user-api/notifications", {
+      await axios.delete("/user-api/notifications", {
         withCredentials: true,
       });
       setNotifications([]);
@@ -87,3 +87,5 @@ function Notifications() {
 }
 
 export default Notifications;
+
+

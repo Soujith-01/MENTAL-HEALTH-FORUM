@@ -22,7 +22,7 @@ function SavedPosts() {
   useEffect(() => {
     const loadSavedPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/user-api/me/saved-posts", {
+        const res = await axios.get("/user-api/me/saved-posts", {
           withCredentials: true,
         });
 
@@ -71,3 +71,5 @@ function SavedPosts() {
 }
 
 export default SavedPosts;
+
+

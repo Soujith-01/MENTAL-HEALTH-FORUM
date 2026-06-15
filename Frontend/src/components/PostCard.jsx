@@ -103,7 +103,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
 
     try {
       if (isSaved) {
-        await axios.delete(`http://localhost:3000/user-api/posts/${currentPost._id}/save`, {
+        await axios.delete(`/user-api/posts/${currentPost._id}/save`, {
           withCredentials: true,
         });
 
@@ -113,7 +113,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
         }
         toast.success("Post removed from saved posts");
       } else {
-        await axios.post(`http://localhost:3000/user-api/posts/${currentPost._id}/save`, null, {
+        await axios.post(`/user-api/posts/${currentPost._id}/save`, null, {
           withCredentials: true,
         });
 
@@ -139,7 +139,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/user-api/posts/${currentPost._id}/react`,
+        `/user-api/posts/${currentPost._id}/react`,
         { type: "like" },
         { withCredentials: true }
       );
@@ -163,7 +163,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/user-api/posts/${currentPost._id}/comments`,
+        `/user-api/posts/${currentPost._id}/comments`,
         { content: commentText.trim(), isAnonymous: false },
         { withCredentials: true }
       );
@@ -188,7 +188,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/user-api/posts/${currentPost._id}/comments/${commentId}/report`,
+        `/user-api/posts/${currentPost._id}/comments/${commentId}/report`,
         { reason: "Comment reported from post card" },
         { withCredentials: true }
       );
@@ -209,7 +209,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
     setActionLoading(true);
 
     try {
-      await axios.delete(`http://localhost:3000/user-api/posts/${currentPost._id}`, {
+      await axios.delete(`/user-api/posts/${currentPost._id}`, {
         withCredentials: true,
       });
 
@@ -246,7 +246,7 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
       formData.append("isAnonymous", editForm.isAnonymous ? "true" : "false");
 
       const res = await axios.put(
-        `http://localhost:3000/user-api/posts/${currentPost._id}`,
+        `/user-api/posts/${currentPost._id}`,
         formData,
         {
           withCredentials: true,
@@ -529,3 +529,4 @@ function PostCard({ post, onDelete, savedPostIds = [], onSavedStateChange }) {
 }
 
 export default PostCard;
+

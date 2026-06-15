@@ -35,7 +35,7 @@ function ChangePassword() {
 
     try {
       const res = await axios.put(
-        "http://localhost:3000/common-api/password",
+        "/common-api/password",
         {
           currentPassword: form.currentPassword,
           newPassword: form.newPassword,
@@ -113,3 +113,4 @@ function ChangePassword() {
 }
 
 export default ChangePassword;
+

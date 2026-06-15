@@ -42,7 +42,7 @@ function Messages() {
 
     try {
       const res = await axios.get(
-        `http://localhost:3000/message-api/messages/conversation/${chatUserId}`,
+        `/message-api/messages/conversation/${chatUserId}`,
         {
           withCredentials: true,
         }
@@ -67,7 +67,7 @@ function Messages() {
       setError("");
 
       try {
-        const res = await axios.get("http://localhost:3000/message-api/chats", {
+        const res = await axios.get("/message-api/chats", {
           withCredentials: true,
         });
 
@@ -100,7 +100,7 @@ function Messages() {
 
       try {
         const res = await axios.get(
-          `http://localhost:3000/message-api/users/search?username=${encodeURIComponent(query)}`,
+          `/message-api/users/search?username=${encodeURIComponent(query)}`,
           { withCredentials: true }
         );
 
@@ -127,7 +127,7 @@ function Messages() {
   }, [recipientResults, currentUser?._id]);
 
   const refreshChats = async (preferredSelectedId = null) => {
-    const res = await axios.get("http://localhost:3000/message-api/chats", {
+    const res = await axios.get("/message-api/chats", {
       withCredentials: true,
     });
 
@@ -166,7 +166,7 @@ function Messages() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/message-api/messages",
+        "/message-api/messages",
         { receiverId: selectedChat._id, content: draft.trim() },
         { withCredentials: true }
       );
@@ -195,7 +195,7 @@ function Messages() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:3000/message-api/messages/conversation/${user._id}`,
+        `/message-api/messages/conversation/${user._id}`,
         { withCredentials: true }
       );
 
@@ -277,3 +277,4 @@ function Messages() {
 }
 
 export default Messages;
+

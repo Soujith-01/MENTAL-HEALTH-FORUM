@@ -33,7 +33,7 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3000/common-api/logout", {
+      await axios.get("/common-api/logout", {
         withCredentials: true,
       });
     } catch {
@@ -95,3 +95,5 @@ function Header() {
 }
 
 export default Header;
+
+

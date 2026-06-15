@@ -12,3 +12,4 @@ function ProtectedAdminRoute({ children }) {
 }
 
 export default ProtectedAdminRoute;
+

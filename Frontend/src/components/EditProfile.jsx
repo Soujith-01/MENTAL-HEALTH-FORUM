@@ -34,7 +34,7 @@ function EditProfile() {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/user-api/me", {
+        const res = await axios.get("/user-api/me", {
           withCredentials: true,
         });
 
@@ -60,7 +60,7 @@ function EditProfile() {
 
     try {
       const res = await axios.patch(
-        "http://localhost:3000/user-api/me",
+        "/user-api/me",
         {
           username: profile.username,
           bio: profile.bio,
@@ -154,3 +154,5 @@ function EditProfile() {
 }
 
 export default EditProfile;
+
+

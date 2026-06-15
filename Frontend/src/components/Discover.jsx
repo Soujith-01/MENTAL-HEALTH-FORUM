@@ -32,7 +32,7 @@ function Discover() {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/user-api/categories");
+        const res = await axios.get("/user-api/categories");
         setCategories(Array.isArray(res.data?.categories) ? res.data.categories : []);
       } catch (requestError) {
         setError(requestError.response?.data?.message || "Unable to load categories");
@@ -51,16 +51,16 @@ function Discover() {
 
       try {
         const endpoint = searchQuery
-          ? `http://localhost:3000/user-api/posts/search?q=${encodeURIComponent(searchQuery)}`
+          ? `/user-api/posts/search?q=${encodeURIComponent(searchQuery)}`
           : selectedCategory
-            ? `http://localhost:3000/user-api/categories/${encodeURIComponent(selectedCategory)}/posts`
-            : "http://localhost:3000/user-api/posts";
+            ? `/user-api/categories/${encodeURIComponent(selectedCategory)}/posts`
+            : "/user-api/posts";
 
         const requests = [axios.get(endpoint, { withCredentials: true })];
 
         if (currentUser?._id) {
           requests.push(
-            axios.get("http://localhost:3000/user-api/me/saved-posts", {
+            axios.get("/user-api/me/saved-posts", {
               withCredentials: true,
             })
           );
@@ -237,3 +237,4 @@ function Discover() {
 }
 
 export default Discover;
+

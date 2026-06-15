@@ -25,8 +25,8 @@ function Profile() {
     const loadProfile = async () => {
       try {
         const [profileRes, dashboardRes] = await Promise.all([
-          axios.get("http://localhost:3000/user-api/me", { withCredentials: true }),
-          axios.get("http://localhost:3000/user-api/dashboard", { withCredentials: true }),
+          axios.get("/user-api/me", { withCredentials: true }),
+          axios.get("/user-api/dashboard", { withCredentials: true }),
         ]);
 
         setProfile(profileRes.data?.user || null);
@@ -123,3 +123,5 @@ function Profile() {
 }
 
 export default Profile;
+
+

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
@@ -42,10 +42,10 @@ function AdminDashboard() {
 
       try {
         const [usersRes, postsRes, commentsRes, statsRes] = await Promise.all([
-          axios.get("http://localhost:3000/admin-api/users", { withCredentials: true }),
-          axios.get("http://localhost:3000/admin-api/reports/posts", { withCredentials: true }),
-          axios.get("http://localhost:3000/admin-api/reports/comments", { withCredentials: true }),
-          axios.get("http://localhost:3000/admin-api/statistics", { withCredentials: true }),
+          axios.get("/admin-api/users", { withCredentials: true }),
+          axios.get("/admin-api/reports/posts", { withCredentials: true }),
+          axios.get("/admin-api/reports/comments", { withCredentials: true }),
+          axios.get("/admin-api/statistics", { withCredentials: true }),
         ]);
 
         setUsers(Array.isArray(usersRes.data?.users) ? usersRes.data.users : []);
@@ -67,7 +67,7 @@ function AdminDashboard() {
 
     try {
       await axios.patch(
-        `http://localhost:3000/admin-api/users/${userId}/role`,
+        `/admin-api/users/${userId}/role`,
         { role: nextRole },
         { withCredentials: true }
       );
@@ -89,7 +89,7 @@ function AdminDashboard() {
 
     try {
       await axios.patch(
-        `http://localhost:3000/admin-api/users/${userId}/status`,
+        `/admin-api/users/${userId}/status`,
         { isUserActive },
         { withCredentials: true }
       );
@@ -117,7 +117,7 @@ function AdminDashboard() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/admin-api/notifications/system",
+        "/admin-api/notifications/system",
         { message: systemMessage.trim() },
         { withCredentials: true }
       );
@@ -302,3 +302,4 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
+

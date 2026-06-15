@@ -26,7 +26,7 @@ function ReportedComments() {
 
     try {
       const res = await axios.get(
-        "http://localhost:3000/admin-api/reports/comments",
+        "/admin-api/reports/comments",
         { withCredentials: true }
       );
 
@@ -45,7 +45,7 @@ function ReportedComments() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:3000/admin-api/comments/${commentId}`,
+        `/admin-api/comments/${commentId}`,
         { withCredentials: true }
       );
 
@@ -156,3 +156,5 @@ function ReportedComments() {
 }
 
 export default ReportedComments;
+
+

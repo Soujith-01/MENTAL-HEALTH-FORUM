@@ -48,12 +48,12 @@ function UserProfile() {
 
       try {
         const userRes = await axios.get(
-          `http://localhost:3000/user-api/users/${userId}`,
+          `/user-api/users/${userId}`,
           { withCredentials: true }
         );
 
         const postsRes = await axios.get(
-          `http://localhost:3000/user-api/users/${userId}/posts`,
+          `/user-api/users/${userId}/posts`,
           { withCredentials: true }
         );
 
@@ -83,7 +83,7 @@ function UserProfile() {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/admin-api/report-user/${userId}`,
+        `/admin-api/report-user/${userId}`,
         { reason: selectedReason },
         { withCredentials: true }
       );
@@ -318,3 +318,5 @@ function UserProfile() {
 }
 
 export default UserProfile;
+
+

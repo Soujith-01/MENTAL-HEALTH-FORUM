@@ -29,7 +29,7 @@ function Feed() {
 
         if (currentUser?._id) {
           requests.push(
-            axios.get("/user-api/me/saved-posts", {
+            axios.get("/user-api/posts", {
               withCredentials: true,
             })
           );

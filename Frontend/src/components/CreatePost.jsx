@@ -41,6 +41,7 @@ function CreatePost() {
   }
 
   const handleSubmit = async (event) => {
+    console.log("submitted")
     event.preventDefault();
     setSaving(true);
     setFormError("");
@@ -52,11 +53,8 @@ function CreatePost() {
       });
 
       toast.success(res.data?.message || "Post created");
-      event.currentTarget.reset();
       const createdPostId = res.data?.post?._id;
-      if (createdPostId) {
-        navigate(`/posts/${createdPostId}`);
-      }
+        navigate('/my-posts');
     } catch (error) {
       const message = error.response?.data?.message || "Unable to create post";
       setFormError(message);

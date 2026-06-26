@@ -53,7 +53,7 @@ const corsOptions = {
   credentials: true,
 }
 
-console.log('CORS allowed origins:', allowedOrigins)
+// console.log('CORS allowed origins:', allowedOrigins)
 app.use(cors(corsOptions));
 
 
